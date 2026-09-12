@@ -1,0 +1,124 @@
+[
+  {
+    "id": "Q01",
+    "question": "What were Arm's total revenues for fiscal years 2025, 2024, and 2023?",
+    "required_evidence": [
+      {
+        "text": "Total revenue 4,007 3,233 2,679",
+        "page": 72
+      }
+    ],
+    "stratum": "S1"
+  },
+  {
+    "id": "Q02",
+    "question": "What primarily drove the increase in Arm's royalty revenue in fiscal 2025?",
+    "required_evidence": [
+      {
+        "text": "driven primarily by higher chip shipments and an improved mix of products with higher royalty rates per chip.",
+        "page": 72
+      }
+    ],
+    "stratum": "S1"
+  },
+  {
+    "id": "Q03",
+    "question": "How does Arm describe the relationship between its Flexible Access agreements and tape-out?",
+    "required_evidence": [
+      {
+        "text": "a license fee once they have reached “tape-out,”",
+        "page": 66
+      },
+      {
+        "text": "for manufacturing.",
+        "page": 67
+      }
+    ],
+    "stratum": "S2"
+  },
+  {
+    "id": "Q04",
+    "question": "What does Arm say about partnering with third parties when it lacks certain resources for research and development?",
+    "required_evidence": [
+      {
+        "text": "To the extent that we do not have the technical expertise, financial resources or other capabilities for a particular research and development project with respect to new products or solutions, we have partnered, and may in the future",
+        "page": 68
+      },
+      {
+        "text": "partner, with third parties.",
+        "page": 69
+      }
+    ],
+    "stratum": "S2"
+  },
+  {
+    "id": "Q05",
+    "question": "What were Arm's external-customer and related-party revenues in fiscal 2025?",
+    "required_evidence": [
+      {
+        "text": "External customers 3,184",
+        "page": 72
+      },
+      {
+        "text": "Related parties 823",
+        "page": 72
+      }
+    ],
+    "stratum": "S3"
+  },
+  {
+    "id": "Q06",
+    "question": "How much did Arm's license and other revenue increase in fiscal 2025 compared with fiscal 2024?",
+    "required_evidence": [
+      {
+        "text": "License and other revenue increased $408 million, or 29%",
+        "page": 72
+      }
+    ],
+    "stratum": "S1"
+  },
+  {
+    "id": "Q07",
+    "question": "What percentage of Arm's outstanding ordinary shares did SoftBank Group beneficially own as of May 20, 2025?",
+    "required_evidence": [
+      {
+        "text": "SoftBank Group beneficially own approximately 87.1% of our outstanding ordinary shares as of May 20, 2025.",
+        "page": 195
+      }
+    ],
+    "stratum": "S7"
+  },
+  {
+    "id": "Q08",
+    "question": "What is Arm's stated sensitivity of operating expenses to a 10% weakening of the U.S. dollar?",
+    "required_evidence": [
+      {
+        "text": "If the U.S. dollar weakened by 10%, our operating expenses could increase by as much as 4%.",
+        "page": 190
+      }
+    ],
+    "stratum": "S1"
+  },
+  {
+    "id": "Q09",
+    "question": "Who is principally responsible for overseeing Arm's security incident response plan and cybersecurity risk management program?",
+    "required_evidence": [
+      {
+        "text": "The Company’s Chief Information Security Officer is the member of the Company’s management that is principally responsible",
+        "page": 197
+      }
+    ],
+    "stratum": "S1"
+  },
+  {
+    "id": "Q10",
+    "question": "Has Arm experienced cybersecurity threats that materially affected its business as of the filing date?",
+    "required_evidence": [
+      {
+        "text": "cybersecurity threats, including as a result of any previous cybersecurity incidents, have not materially affected the Company",
+        "page": 197
+      }
+    ],
+    "stratum": "S1"
+  }
+]
