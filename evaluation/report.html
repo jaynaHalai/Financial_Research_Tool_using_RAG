@@ -1,0 +1,1224 @@
+<title>Arm Filing RAG Evaluation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap">
+
+<style>
+  :root {
+    color-scheme: light;
+    --ground:      #f6f7f9;
+    --surface:     #ffffff;
+    --surface-2:   #eef1f5;
+    --ink:         #10151c;
+    --ink-2:       #4a5462;
+    --muted:       #78838f;
+    --rule:        #e3e7ec;
+    --rule-strong: #cdd4dc;
+    --accent:      #2a78d6;
+    --accent-soft: #e8f0fb;
+    --good:        #0ca30c;
+    --critical:    #d03b3b;
+    --series-1:    #2a78d6;
+    --series-2:    #eb6834;
+    --series-3:    #1baf7a;
+
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ground:      #0e1116;
+      --surface:     #161a21;
+      --surface-2:   #1e242d;
+      --ink:         #f2f4f7;
+      --ink-2:       #b3bcc7;
+      --muted:       #7f8a96;
+      --rule:        #262c35;
+      --rule-strong: #333b46;
+      --accent:      #5f9ff0;
+      --accent-soft: #1a2534;
+      --good:        #38c238;
+      --critical:    #e46767;
+      --series-1:    #3987e5;
+      --series-2:    #d95926;
+      --series-3:    #199e70;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --ground:      #0e1116;
+    --surface:     #161a21;
+    --surface-2:   #1e242d;
+    --ink:         #f2f4f7;
+    --ink-2:       #b3bcc7;
+    --muted:       #7f8a96;
+    --rule:        #262c35;
+    --rule-strong: #333b46;
+    --accent:      #5f9ff0;
+    --accent-soft: #1a2534;
+    --good:        #38c238;
+    --critical:    #e46767;
+    --series-1:    #3987e5;
+    --series-2:    #d95926;
+    --series-3:    #199e70;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 28px 96px;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    border-bottom: 1px solid var(--rule-strong);
+    padding: 56px 0 28px;
+    margin-bottom: 40px;
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 18px;
+  }
+
+  h1 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(34px, 5.2vw, 50px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    margin: 0 0 16px;
+  }
+
+  .standfirst {
+    font-family: var(--serif);
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 0 0 32px;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px 32px;
+    border-top: 1px solid var(--rule);
+    padding-top: 22px;
+  }
+
+  .fact dt {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 5px;
+  }
+
+  .fact dd {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.35;
+  }
+
+  .fact dd span {
+    display: block;
+    font-weight: 400;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  /* ---------- sections ---------- */
+
+  section { margin: 0 0 60px; }
+
+  .layer {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 12px;
+  }
+
+  .layer::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0 0 14px;
+  }
+
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    margin: 32px 0 10px;
+  }
+
+  p { max-width: 68ch; margin: 0 0 16px; }
+
+  a { color: var(--accent); }
+
+  code, .m {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  strong { font-weight: 600; }
+
+  /* ---------- headline result ---------- */
+
+  .headline {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--accent);
+    padding: 26px 28px;
+    margin-bottom: 34px;
+  }
+
+  .headline .label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+
+  .headline .config {
+    font-family: var(--mono);
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    margin: 0 0 18px;
+    line-height: 1.4;
+  }
+
+  .headline-figures {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+  }
+
+  .figure-val {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .figure-cap {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ---------- stat tiles ---------- */
+
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin: 24px 0;
+  }
+
+  .tile {
+    background: var(--surface);
+    padding: 18px 18px 16px;
+  }
+
+  .tile .v {
+    font-size: 27px;
+    font-weight: 600;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tile .v.ok { color: var(--good); }
+
+  .tile .k {
+    font-size: 12.5px;
+    color: var(--ink-2);
+    margin-top: 6px;
+    line-height: 1.35;
+  }
+
+  .tile .n {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* ---------- charts ---------- */
+
+  figure {
+    margin: 26px 0 8px;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 22px 22px 16px;
+  }
+
+  .chart-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 20px;
+    margin-bottom: 4px;
+  }
+
+  .chart-title {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .chart-sub {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 14px 0 6px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12.5px;
+    color: var(--ink-2);
+  }
+
+  .swatch {
+    width: 11px;
+    height: 11px;
+    border-radius: 2px;
+    flex: none;
+  }
+
+  .chart-scroll {
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .chart-scroll svg {
+    display: block;
+    min-width: 480px;
+    width: 100%;
+    height: auto;
+  }
+
+  .tick-text {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    fill: var(--muted);
+  }
+
+  .group-text {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    fill: var(--ink-2);
+  }
+
+  .val-text {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    fill: var(--ink-2);
+  }
+
+  .bar { transition: opacity 0.12s ease; }
+  .bar:hover { opacity: 0.82; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar { transition: none; }
+  }
+
+  .tip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--ink);
+    color: var(--ground);
+    font-size: 12px;
+    line-height: 1.4;
+    padding: 7px 10px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translate(-50%, -100%);
+    z-index: 5;
+  }
+
+  .tip.on { opacity: 1; }
+
+  .tip .tv {
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  figcaption {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+    max-width: 72ch;
+  }
+
+  /* ---------- tables ---------- */
+
+  .table-scroll {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+    margin: 22px 0 8px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 520px;
+    font-size: 13px;
+  }
+
+  caption {
+    text-align: left;
+    font-size: 12px;
+    color: var(--muted);
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  th, td {
+    text-align: left;
+    padding: 9px 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  thead th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    white-space: nowrap;
+    background: var(--surface-2);
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  td.num, th.num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  td.cfg {
+    font-family: var(--mono);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  tr.best td {
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .pill {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    padding: 2px 7px;
+    border-radius: 3px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+
+  .pill.bad { color: var(--critical); }
+  .pill.good { color: var(--good); }
+
+  /* ---------- callout ---------- */
+
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-left: 3px solid var(--critical);
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+
+  .callout p:last-child { margin-bottom: 0; }
+
+  .callout .ct {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--critical);
+  }
+
+  /* ---------- limitations ---------- */
+
+  ul.notes {
+    max-width: 70ch;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul.notes li {
+    position: relative;
+    padding: 12px 0 12px 22px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 14px;
+    color: var(--ink-2);
+  }
+
+  ul.notes li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 21px;
+    width: 7px;
+    height: 1px;
+    background: var(--rule-strong);
+  }
+
+  ul.notes li:last-child { border-bottom: none; }
+
+  @media (max-width: 560px) {
+    .facts { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .foot {
+    border-top: 1px solid var(--rule-strong);
+    margin-top: 56px;
+    padding-top: 20px;
+    font-size: 12.5px;
+    color: var(--muted);
+    max-width: 72ch;
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Retrieval-augmented generation &middot; Evaluation report</p>
+    <h1>Reranking only works if the reranker can see the evidence</h1>
+    <p class="standfirst">
+      Eighteen retrieval configurations measured against the Arm Holdings FY2025
+      annual report, under one strict scoring rule: a required span counts only
+      when it appears verbatim in the retrieved text.
+    </p>
+
+    <dl class="facts">
+      <div class="fact">
+        <dt>Corpus</dt>
+        <dd>Arm Holdings plc<span>Form 10-K, FY2025</span></dd>
+      </div>
+      <div class="fact">
+        <dt>Extent</dt>
+        <dd>136,349 words<span>pages 5&ndash;201</span></dd>
+      </div>
+      <div class="fact">
+        <dt>Chunks</dt>
+        <dd>303 / 258<span>fixed / semantic</span></dd>
+      </div>
+      <div class="fact">
+        <dt>Benchmark</dt>
+        <dd>15 questions<span>10 answerable, 5 not</span></dd>
+      </div>
+      <div class="fact">
+        <dt>Embedding</dt>
+        <dd>text-embedding-3-small<span>1,536-dim, FAISS</span></dd>
+      </div>
+      <div class="fact">
+        <dt>Generation</dt>
+        <dd>gpt-4o-mini<span>judged by gpt-4o</span></dd>
+      </div>
+    </dl>
+  </header>
+
+  <!-- ============ HEADLINE ============ -->
+
+  <section>
+    <div class="headline">
+      <p class="label">Best configuration</p>
+      <p class="config">semantic chunks &rarr; hybrid retrieval &rarr; windowed rerank</p>
+      <div class="headline-figures">
+        <div>
+          <div class="figure-val">0.90</div>
+          <div class="figure-cap">span recovery @5</div>
+        </div>
+        <div>
+          <div class="figure-val">1.00</div>
+          <div class="figure-cap">span recovery @10</div>
+        </div>
+        <div>
+          <div class="figure-val">100%</div>
+          <div class="figure-cap">faithfulness</div>
+        </div>
+        <div>
+          <div class="figure-val">1.75s</div>
+          <div class="figure-cap">latency p50</div>
+        </div>
+      </div>
+    </div>
+
+    <p>
+      The pipeline answers questions about a single SEC filing and cites the
+      printed page each claim came from. Every number on this page is produced
+      by <code>evaluate_retrieval.py</code> and <code>evaluate_answers.py</code>,
+      and every configuration is scored by the same rule.
+    </p>
+  </section>
+
+  <!-- ============ MEASUREMENT ============ -->
+
+  <section>
+    <p class="layer">Measurement</p>
+    <h2>The first result was a measurement artifact</h2>
+
+    <p>
+      An earlier version of this evaluation scored retrieval with two different
+      coverage functions in two different scripts, then compared the outputs to
+      each other. One awarded full credit only on a verbatim match; the other
+      awarded partial credit for each gold <em>word</em> appearing anywhere in
+      the retrieved text.
+    </p>
+
+    <p>
+      The second rule is far more generous than it looks. Financial prose reuses
+      the same vocabulary constantly, so when the retrieval misses completely,
+      words like <code>revenue</code>, <code>total</code> and <code>2025</code>
+      still turn up in whatever was returned:
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Both functions scoring a <strong>total retrieval miss</strong> &mdash; the gold span appears nowhere in the retrieved text.</caption>
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th class="num">Verbatim containment</th>
+            <th class="num">Token overlap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="cfg">Q01</td><td class="num">0.00</td><td class="num">0.40</td></tr>
+          <tr><td class="cfg">Q04</td><td class="num">0.00</td><td class="num">0.79</td></tr>
+          <tr><td class="cfg">Q05</td><td class="num">0.00</td><td class="num">1.00</td></tr>
+          <tr><td class="cfg">Q09</td><td class="num">0.00</td><td class="num">0.77</td></tr>
+          <tr><td class="cfg">Q10</td><td class="num">0.00</td><td class="num">0.88</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      <p class="ct">What this invalidated</p>
+      <p>
+        The original report claimed reranking lifted recall from
+        <span class="m">0.502</span> to <span class="m">0.994</span>. The
+        pre-rerank figure came from the strict function and the post-rerank
+        figure from the generous one, so the gain was mostly a change of ruler.
+        Under one rule, naive reranking actually <strong>hurt</strong>.
+      </p>
+    </div>
+
+    <p>
+      Everything below uses strict verbatim containment, on the answerable
+      questions only. It is a harsh metric &mdash; a chunk that contains the
+      answer but splits the gold span across a boundary scores zero &mdash; but
+      it is the same harsh metric everywhere, so the comparisons hold.
+    </p>
+  </section>
+
+  <!-- ============ CHUNKING ============ -->
+
+  <section>
+    <p class="layer">Chunking</p>
+    <h2>Semantic chunks beat fixed windows</h2>
+
+    <p>
+      Two strategies over the same cleaned text: fixed 500-word windows with
+      50 words of overlap, and embedding-similarity breakpoints grouped toward
+      a 500-word target. Compared here on dense retrieval with no reranking, so
+      only the chunking differs.
+    </p>
+
+    <figure>
+      <div class="chart-head">
+        <span class="chart-title">Span recovery by chunking strategy</span>
+        <span class="chart-sub">dense retrieval, no reranking</span>
+      </div>
+      <div class="legend" id="legend-chunk"></div>
+      <div class="chart-scroll">
+        <svg id="chart-chunk" viewBox="0 0 680 300" role="img"
+             aria-label="Grouped bar chart. Fixed chunking scores 0.50, 0.60 and 0.75 span recovery at top 3, 5 and 10. Semantic chunking scores 0.80 at all three."></svg>
+        <div class="tip" id="tip-chunk"></div>
+      </div>
+      <figcaption>
+        Semantic chunking gains 30 points at top-3. Fixed windows cut mid-table
+        and mid-sentence, so a gold span that straddles a boundary is
+        unrecoverable at any k.
+      </figcaption>
+    </figure>
+
+    <h3>The semantic chunker's size guard does not hold</h3>
+
+    <p>
+      Worth stating plainly, because it shapes the reranking result that
+      follows. The max-size guard only splits <em>between</em> semantic units,
+      so any single unit longer than the 600-word ceiling passes through whole:
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Semantic chunk size distribution &mdash; 258 chunks, target 400&ndash;600 words.</caption>
+        <thead>
+          <tr><th>Band</th><th class="num">Chunks</th><th class="num">Share</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Within 400&ndash;600 words</td><td class="num">172</td><td class="num">67%</td></tr>
+          <tr><td>Under 400 words</td><td class="num">51</td><td class="num">20%</td></tr>
+          <tr><td>Over 600 words</td><td class="num">35</td><td class="num">13%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      The full range runs from <span class="m">10</span> to
+      <span class="m">2,436</span> words. Those outliers are what break the
+      reranker.
+    </p>
+  </section>
+
+  <!-- ============ RETRIEVAL ============ -->
+
+  <section>
+    <p class="layer">Retrieval</p>
+    <h2>Hybrid pays off at depth, not at the top</h2>
+
+    <p>
+      Dense search over FAISS, BM25 over the same chunks, and the two fused by
+      reciprocal rank fusion. BM25 tokenisation preserves figures like
+      <code>4,007</code> and <code>87.1%</code> as single tokens, which is the
+      whole reason to have it for a financial filing.
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Retrieval mode on semantic chunks, no reranking.</caption>
+        <thead>
+          <tr>
+            <th>Mode</th>
+            <th class="num">@3</th>
+            <th class="num">@5</th>
+            <th class="num">@10</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="cfg">dense</td><td class="num">0.80</td><td class="num">0.80</td><td class="num">0.80</td></tr>
+          <tr><td class="cfg">sparse (BM25)</td><td class="num">0.70</td><td class="num">0.80</td><td class="num">0.80</td></tr>
+          <tr><td class="cfg">hybrid (RRF)</td><td class="num">0.70</td><td class="num">0.70</td><td class="num">0.90</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      On its own, hybrid looks like a downgrade: it trades top-3 precision for
+      recall at depth. That trade is only worth making if something downstream
+      can reorder the deeper pool &mdash; which is exactly what a working
+      reranker does.
+    </p>
+  </section>
+
+  <!-- ============ RERANKING ============ -->
+
+  <section>
+    <p class="layer">Reranking</p>
+    <h2>A cross-encoder that reads 18% of a chunk</h2>
+
+    <p>
+      The reranker is <code>ms-marco-MiniLM-L-6-v2</code>, which truncates its
+      input at <strong>512 tokens</strong>. The largest semantic chunk is
+      <strong>2,798 tokens</strong> of dense financial text. Passing whole
+      chunks to it means scoring each candidate on roughly its first fifth, and
+      silently discarding the rest.
+    </p>
+
+    <p>
+      For the chunk holding Arm's consolidated income statement, the gold span
+      sits 5% of the way in &mdash; it happens to survive. For others it does
+      not, and the reranker confidently demotes a chunk whose evidence it never
+      read. The fix is to score overlapping 250-word windows and give each chunk
+      the score of its best window.
+    </p>
+
+    <figure>
+      <div class="chart-head">
+        <span class="chart-title">Reranking impact</span>
+        <span class="chart-sub">semantic chunks, hybrid retrieval, 20 candidates</span>
+      </div>
+      <div class="legend" id="legend-rerank"></div>
+      <div class="chart-scroll">
+        <svg id="chart-rerank" viewBox="0 0 680 300" role="img"
+             aria-label="Grouped bar chart. No reranking scores 0.70, 0.70, 0.90 at top 3, 5, 10. Truncated reranking scores 0.60, 0.60, 0.80. Windowed reranking scores 0.90, 0.90, 1.00."></svg>
+        <div class="tip" id="tip-rerank"></div>
+      </div>
+      <figcaption>
+        Truncated reranking costs 10 points at every depth. Windowed reranking
+        gains 20 at top-3 and top-5, and recovers every required span by top-10.
+        The same model, the same candidates &mdash; only the input length changed.
+      </figcaption>
+    </figure>
+
+    <p>
+      This is the result the project turns on. A reranking step that is wired in
+      correctly but fed the wrong input shape looks like evidence that reranking
+      does not help, when it is really evidence that the model never saw the
+      text it was asked to judge.
+    </p>
+  </section>
+
+  <!-- ============ GENERATION ============ -->
+
+  <section>
+    <p class="layer">Generation</p>
+    <h2>Grounding, refusal, and citations that hold up</h2>
+
+    <p>
+      The generator is instructed to answer only from retrieved evidence, cite
+      the printed page of every claim, and refuse outright when the evidence does
+      not support an answer. A second model, <code>gpt-4o</code>, audits each
+      answer against the evidence it was actually given.
+    </p>
+
+    <div class="tiles">
+      <div class="tile">
+        <div class="v ok">100%</div>
+        <div class="k">Faithfulness</div>
+        <div class="n">10 of 10 answered</div>
+      </div>
+      <div class="tile">
+        <div class="v ok">100%</div>
+        <div class="k">Correct refusal</div>
+        <div class="n">5 of 5 unanswerable</div>
+      </div>
+      <div class="tile">
+        <div class="v ok">0%</div>
+        <div class="k">False refusal</div>
+        <div class="n">0 of 10 answerable</div>
+      </div>
+      <div class="tile">
+        <div class="v ok">100%</div>
+        <div class="k">Citation validity</div>
+        <div class="n">every page cited was offered</div>
+      </div>
+      <div class="tile">
+        <div class="v">1.75s</div>
+        <div class="k">Latency p50</div>
+        <div class="n">p95 2.01s, warm</div>
+      </div>
+    </div>
+
+    <h3>The unanswerable questions are near misses, not strangers</h3>
+
+    <p>
+      A refusal test is only meaningful if retrieval returns something
+      plausible. Each of the five is designed so the system finds related text
+      and must still decline:
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Unanswerable set &mdash; all five correctly refused.</caption>
+        <thead>
+          <tr><th>Question</th><th>Why the filing cannot answer it</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="cfg">Q11</td>
+            <td>FY2026 guidance &mdash; the filing reports FY2025 results only</td>
+            <td><span class="pill good">refused</span></td>
+          </tr>
+          <tr>
+            <td class="cfg">Q12</td>
+            <td>Bangalore headcount &mdash; staff are not broken down by office</td>
+            <td><span class="pill good">refused</span></td>
+          </tr>
+          <tr>
+            <td class="cfg">Q13</td>
+            <td>Nvidia revenue &mdash; Nvidia appears only in the CEO's biography</td>
+            <td><span class="pill good">refused</span></td>
+          </tr>
+          <tr>
+            <td class="cfg">Q14</td>
+            <td>Treasure Data price &mdash; no such acquisition is described</td>
+            <td><span class="pill good">refused</span></td>
+          </tr>
+          <tr>
+            <td class="cfg">Q15</td>
+            <td>Automotive market share &mdash; discussed as risk, never quantified</td>
+            <td><span class="pill good">refused</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Why citation validity is tracked separately</h3>
+
+    <p>
+      Printed page numbers survive inside the chunk text as bare digits. During
+      testing the model answered correctly but cited
+      <span class="m">page 125</span> &mdash; a number it had copied out of the
+      body text, not from any page label it was shown. The content was right and
+      a faithfulness judge passes it, because the judge checks claims against
+      evidence, not citations against offered sources.
+    </p>
+
+    <p>
+      Citation validity closes that gap: every page an answer cites must fall
+      within a page range actually offered as evidence. It sits at 100% after
+      relabelling each evidence block with its page reference, but the failure
+      mode is real and worth keeping instrumented.
+    </p>
+  </section>
+
+  <!-- ============ FULL TABLE ============ -->
+
+  <section>
+    <p class="layer">Appendix</p>
+    <h2>All eighteen configurations</h2>
+
+    <p>
+      Span recovery is the mean fraction of a question's required spans found;
+      full recovery is the share of questions where every required span was
+      found. Ten answerable questions, 20 candidates before reranking.
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <caption>Sorted by span recovery @5, then @10. Best configuration highlighted.</caption>
+        <thead>
+          <tr>
+            <th>Chunking</th>
+            <th>Retrieval</th>
+            <th>Rerank</th>
+            <th class="num">Span @3</th>
+            <th class="num">Span @5</th>
+            <th class="num">Span @10</th>
+            <th class="num">Full @5</th>
+          </tr>
+        </thead>
+        <tbody id="all-configs"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ LIMITATIONS ============ -->
+
+  <section>
+    <p class="layer">Caveats</p>
+    <h2>What these numbers do not establish</h2>
+
+    <ul class="notes">
+      <li>
+        Ten answerable questions is a small benchmark. One question is worth
+        0.10, so a gap of that size is a single item, not a trend.
+      </li>
+      <li>
+        The corpus is one document. Nothing here tests retrieval across filings,
+        across companies, or across reporting periods.
+      </li>
+      <li>
+        Faithfulness is judged by a model, not a human. It checks grounding
+        against retrieved evidence, and will not catch an answer that is
+        faithful to evidence which is itself the wrong passage.
+      </li>
+      <li>
+        The strict metric penalises correct retrievals whose gold span is split
+        across a chunk boundary. It understates real-world usefulness and is
+        chosen for comparability, not realism.
+      </li>
+      <li>
+        Page numbers are recovered heuristically, from the ascending subsequence
+        of standalone numbers in the cleaned text. Validated against every gold
+        span, but not against all 201 pages.
+      </li>
+      <li>
+        Latency is measured warm, single-user, with no concurrency. Cold start
+        adds several seconds while the cross-encoder loads.
+      </li>
+    </ul>
+  </section>
+
+  <p class="foot">
+    Generated from <code>evaluation/retrieval_results.json</code> and
+    <code>evaluation/answer_results.json</code>. Corpus: Arm Holdings plc
+    Form 10-K for the fiscal year ended 31 March 2025, retrieved as filed.
+  </p>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var SVG = "http://www.w3.org/2000/svg";
+
+  function el(name, attrs) {
+    var node = document.createElementNS(SVG, name);
+    for (var key in attrs) {
+      if (attrs[key] !== null && attrs[key] !== undefined) {
+        node.setAttribute(key, attrs[key]);
+      }
+    }
+    return node;
+  }
+
+  // Bar with rounded top corners, anchored flat to the baseline.
+  function barPath(x, y, w, h, r) {
+    var radius = Math.max(0, Math.min(r, h, w / 2));
+    var base = y + h;
+    return [
+      "M", x, base,
+      "L", x, y + radius,
+      "Q", x, y, x + radius, y,
+      "L", x + w - radius, y,
+      "Q", x + w, y, x + w, y + radius,
+      "L", x + w, base,
+      "Z"
+    ].join(" ");
+  }
+
+  function renderGrouped(opts) {
+    var svg = document.getElementById(opts.svg);
+    var tip = document.getElementById(opts.tip);
+    var legend = document.getElementById(opts.legend);
+
+    var W = 680, H = 300;
+    var mL = 46, mR = 14, mT = 26, mB = 38;
+    var plotW = W - mL - mR;
+    var plotH = H - mT - mB;
+    var yMax = 1;
+
+    var ticks = [0, 0.25, 0.5, 0.75, 1];
+
+    function yOf(v) { return mT + plotH - (v / yMax) * plotH; }
+
+    // Gridlines and y ticks.
+    ticks.forEach(function (t) {
+      var y = yOf(t);
+      svg.appendChild(el("line", {
+        x1: mL, x2: mL + plotW, y1: y, y2: y,
+        style: "stroke: var(--rule); stroke-width: 1"
+      }));
+      var label = el("text", {
+        x: mL - 10, y: y + 4, "text-anchor": "end", class: "tick-text"
+      });
+      label.textContent = t.toFixed(2);
+      svg.appendChild(label);
+    });
+
+    // Baseline, slightly stronger than the grid.
+    svg.appendChild(el("line", {
+      x1: mL, x2: mL + plotW, y1: yOf(0), y2: yOf(0),
+      style: "stroke: var(--rule-strong); stroke-width: 1"
+    }));
+
+    var nGroups = opts.groups.length;
+    var nSeries = opts.series.length;
+    var groupW = plotW / nGroups;
+    var gap = 2;
+    var barW = Math.min(46, (groupW * 0.66 - gap * (nSeries - 1)) / nSeries);
+    var clusterW = barW * nSeries + gap * (nSeries - 1);
+
+    opts.groups.forEach(function (group, gi) {
+      var cx = mL + groupW * gi + groupW / 2;
+      var startX = cx - clusterW / 2;
+
+      opts.series.forEach(function (series, si) {
+        var value = series.values[gi];
+        var x = startX + si * (barW + gap);
+        var y = yOf(value);
+        var h = yOf(0) - y;
+
+        var bar = el("path", {
+          d: barPath(x, y, barW, h, 4),
+          class: "bar",
+          style: "fill: var(--series-" + (si + 1) + ")"
+        });
+
+        bar.addEventListener("mouseenter", function () {
+          tip.textContent = series.name + " · " + group.label;
+          var strong = document.createElement("span");
+          strong.className = "tv";
+          strong.textContent = "  " + value.toFixed(2);
+          tip.appendChild(strong);
+          tip.classList.add("on");
+          var box = svg.getBoundingClientRect();
+          var scale = box.width / W;
+          tip.style.left = ((x + barW / 2) * scale) + "px";
+          tip.style.top = ((y - 10) * scale) + "px";
+        });
+
+        bar.addEventListener("mouseleave", function () {
+          tip.classList.remove("on");
+        });
+
+        svg.appendChild(bar);
+
+        // Direct value labels: relief for the sub-3:1 light-mode series,
+        // and the numbers are the point of the chart.
+        var vt = el("text", {
+          x: x + barW / 2, y: y - 7,
+          "text-anchor": "middle", class: "val-text"
+        });
+        vt.textContent = value.toFixed(2);
+        svg.appendChild(vt);
+      });
+
+      var gt = el("text", {
+        x: cx, y: yOf(0) + 24, "text-anchor": "middle", class: "group-text"
+      });
+      gt.textContent = group.label;
+      svg.appendChild(gt);
+    });
+
+    opts.series.forEach(function (series, si) {
+      var item = document.createElement("div");
+      item.className = "legend-item";
+      var sw = document.createElement("span");
+      sw.className = "swatch";
+      sw.style.background = "var(--series-" + (si + 1) + ")";
+      item.appendChild(sw);
+      item.appendChild(document.createTextNode(series.name));
+      legend.appendChild(item);
+    });
+  }
+
+  var groups = [
+    { label: "top 3" },
+    { label: "top 5" },
+    { label: "top 10" }
+  ];
+
+  renderGrouped({
+    svg: "chart-chunk",
+    tip: "tip-chunk",
+    legend: "legend-chunk",
+    groups: groups,
+    series: [
+      { name: "Fixed 500-word windows", values: [0.50, 0.60, 0.75] },
+      { name: "Semantic breakpoints", values: [0.80, 0.80, 0.80] }
+    ]
+  });
+
+  renderGrouped({
+    svg: "chart-rerank",
+    tip: "tip-rerank",
+    legend: "legend-rerank",
+    groups: groups,
+    series: [
+      { name: "No reranking", values: [0.70, 0.70, 0.90] },
+      { name: "Truncated (whole chunk)", values: [0.60, 0.60, 0.80] },
+      { name: "Windowed (250 words)", values: [0.90, 0.90, 1.00] }
+    ]
+  });
+
+  // ---- appendix table ----
+
+  var rows = [
+    ["semantic", "hybrid", "windowed", 0.9, 0.9, 1.0, 0.9],
+    ["semantic", "dense", "windowed", 0.8, 0.9, 0.9, 0.9],
+    ["semantic", "dense", "none", 0.8, 0.8, 0.8, 0.8],
+    ["semantic", "sparse", "windowed", 0.8, 0.8, 0.9, 0.8],
+    ["semantic", "sparse", "none", 0.7, 0.8, 0.8, 0.8],
+    ["fixed", "hybrid", "truncated", 0.7, 0.75, 0.95, 0.7],
+    ["fixed", "hybrid", "windowed", 0.7, 0.7, 0.95, 0.7],
+    ["semantic", "hybrid", "none", 0.7, 0.7, 0.9, 0.7],
+    ["fixed", "sparse", "none", 0.7, 0.7, 0.8, 0.7],
+    ["fixed", "sparse", "truncated", 0.7, 0.7, 0.8, 0.7],
+    ["fixed", "sparse", "windowed", 0.7, 0.7, 0.8, 0.7],
+    ["fixed", "dense", "truncated", 0.6, 0.65, 0.75, 0.6],
+    ["semantic", "sparse", "truncated", 0.6, 0.6, 0.9, 0.6],
+    ["semantic", "hybrid", "truncated", 0.6, 0.6, 0.8, 0.6],
+    ["semantic", "dense", "truncated", 0.6, 0.6, 0.7, 0.6],
+    ["fixed", "dense", "none", 0.5, 0.6, 0.75, 0.6],
+    ["fixed", "dense", "windowed", 0.6, 0.6, 0.75, 0.6],
+    ["fixed", "hybrid", "none", 0.6, 0.6, 0.7, 0.6]
+  ];
+
+  var tbody = document.getElementById("all-configs");
+
+  rows.forEach(function (row, index) {
+    var tr = document.createElement("tr");
+    if (index === 0) { tr.className = "best"; }
+
+    row.forEach(function (cell, ci) {
+      var td = document.createElement("td");
+      if (ci < 3) {
+        td.className = "cfg";
+        td.textContent = cell;
+      } else {
+        td.className = "num";
+        td.textContent = cell.toFixed(2);
+      }
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+})();
+</script>
