@@ -5,10 +5,14 @@
     "required_evidence": [
       {
         "text": "Total revenue 4,007 3,233 2,679",
-        "page": 72
+        "page": 125,
+        "all_pages": [
+          125
+        ]
       }
     ],
-    "stratum": "S1"
+    "stratum": "S1",
+    "answerable": true
   },
   {
     "id": "Q02",
@@ -16,10 +20,15 @@
     "required_evidence": [
       {
         "text": "driven primarily by higher chip shipments and an improved mix of products with higher royalty rates per chip.",
-        "page": 72
+        "page": 73,
+        "all_pages": [
+          73,
+          79
+        ]
       }
     ],
-    "stratum": "S1"
+    "stratum": "S1",
+    "answerable": true
   },
   {
     "id": "Q03",
@@ -27,14 +36,21 @@
     "required_evidence": [
       {
         "text": "a license fee once they have reached “tape-out,”",
-        "page": 66
+        "page": 68,
+        "all_pages": [
+          68
+        ]
       },
       {
         "text": "for manufacturing.",
-        "page": 67
+        "page": 68,
+        "all_pages": [
+          68
+        ]
       }
     ],
-    "stratum": "S2"
+    "stratum": "S2",
+    "answerable": true
   },
   {
     "id": "Q04",
@@ -42,29 +58,46 @@
     "required_evidence": [
       {
         "text": "To the extent that we do not have the technical expertise, financial resources or other capabilities for a particular research and development project with respect to new products or solutions, we have partnered, and may in the future",
-        "page": 68
+        "page": 11,
+        "all_pages": [
+          11,
+          69
+        ]
       },
       {
         "text": "partner, with third parties.",
-        "page": 69
+        "page": 70,
+        "all_pages": [
+          70
+        ]
       }
     ],
-    "stratum": "S2"
+    "stratum": "S2",
+    "answerable": true
   },
   {
     "id": "Q05",
     "question": "What were Arm's external-customer and related-party revenues in fiscal 2025?",
     "required_evidence": [
       {
-        "text": "External customers 3,184",
-        "page": 72
+        "text": "revenue from external customers $ 3,184",
+        "page": 71,
+        "all_pages": [
+          71,
+          125
+        ]
       },
       {
-        "text": "Related parties 823",
-        "page": 72
+        "text": "revenue from related parties 823",
+        "page": 71,
+        "all_pages": [
+          71,
+          125
+        ]
       }
     ],
-    "stratum": "S3"
+    "stratum": "S3",
+    "answerable": true
   },
   {
     "id": "Q06",
@@ -72,10 +105,14 @@
     "required_evidence": [
       {
         "text": "License and other revenue increased $408 million, or 29%",
-        "page": 72
+        "page": 72,
+        "all_pages": [
+          72
+        ]
       }
     ],
-    "stratum": "S1"
+    "stratum": "S1",
+    "answerable": true
   },
   {
     "id": "Q07",
@@ -83,10 +120,14 @@
     "required_evidence": [
       {
         "text": "SoftBank Group beneficially own approximately 87.1% of our outstanding ordinary shares as of May 20, 2025.",
-        "page": 195
+        "page": 195,
+        "all_pages": [
+          195
+        ]
       }
     ],
-    "stratum": "S7"
+    "stratum": "S7",
+    "answerable": true
   },
   {
     "id": "Q08",
@@ -94,10 +135,14 @@
     "required_evidence": [
       {
         "text": "If the U.S. dollar weakened by 10%, our operating expenses could increase by as much as 4%.",
-        "page": 190
+        "page": 190,
+        "all_pages": [
+          190
+        ]
       }
     ],
-    "stratum": "S1"
+    "stratum": "S1",
+    "answerable": true
   },
   {
     "id": "Q09",
@@ -105,10 +150,14 @@
     "required_evidence": [
       {
         "text": "The Company’s Chief Information Security Officer is the member of the Company’s management that is principally responsible",
-        "page": 197
+        "page": 197,
+        "all_pages": [
+          197
+        ]
       }
     ],
-    "stratum": "S1"
+    "stratum": "S1",
+    "answerable": true
   },
   {
     "id": "Q10",
@@ -116,9 +165,53 @@
     "required_evidence": [
       {
         "text": "cybersecurity threats, including as a result of any previous cybersecurity incidents, have not materially affected the Company",
-        "page": 197
+        "page": 198,
+        "all_pages": [
+          198
+        ]
       }
     ],
-    "stratum": "S1"
+    "stratum": "S1",
+    "answerable": true
+  },
+  {
+    "id": "Q11",
+    "question": "What is Arm's revenue guidance for fiscal year 2026?",
+    "required_evidence": [],
+    "stratum": "S0-unanswerable",
+    "answerable": false,
+    "why_unanswerable": "The filing reports FY2025 results and contains no FY2026 guidance."
+  },
+  {
+    "id": "Q12",
+    "question": "How many employees does Arm have at its Bangalore office?",
+    "required_evidence": [],
+    "stratum": "S0-unanswerable",
+    "answerable": false,
+    "why_unanswerable": "Headcount is not broken down by individual office."
+  },
+  {
+    "id": "Q13",
+    "question": "What was Nvidia's data center revenue in fiscal 2025?",
+    "required_evidence": [],
+    "stratum": "S0-unanswerable",
+    "answerable": false,
+    "why_unanswerable": "Nvidia appears only in the CEO's biography; no Nvidia financials."
+  },
+  {
+    "id": "Q14",
+    "question": "What price did Arm pay to acquire Treasure Data?",
+    "required_evidence": [],
+    "stratum": "S0-unanswerable",
+    "answerable": false,
+    "why_unanswerable": "No such acquisition is described in this filing."
+  },
+  {
+    "id": "Q15",
+    "question": "What percentage market share does Arm hold in automotive microcontrollers?",
+    "required_evidence": [],
+    "stratum": "S0-unanswerable",
+    "answerable": false,
+    "why_unanswerable": "Market share is discussed only as a risk factor, never quantified."
   }
 ]
