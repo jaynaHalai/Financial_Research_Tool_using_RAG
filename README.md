@@ -1,4 +1,4 @@
-# Financial Document Intelligence RAG
+# Financial Research Tool using RAG
 
 A retrieval-augmented generation pipeline over Arm Holdings plc's FY2025 Form
 10-K. It answers factual questions about the filing, cites the printed page
