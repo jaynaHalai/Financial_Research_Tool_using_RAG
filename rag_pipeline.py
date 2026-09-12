@@ -13,9 +13,9 @@ import time
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
+from config import GENERATION_MODEL
 from retrieval import Retriever
 
-GENERATION_MODEL = "gpt-4o-mini"
 MAX_ATTEMPTS = 4
 DEFAULT_STRATEGY = "semantic"
 DEFAULT_MODE = "hybrid"
@@ -70,7 +70,7 @@ def invoke_with_retry(model, prompt, max_attempts=MAX_ATTEMPTS):
 
 
 def format_evidence(retriever, chunk_ids):
-    """Render retrieved chunks as numbered, page-labelled evidence blocks."""
+    """Render retrieved chunks as page-labelled evidence blocks."""
     blocks = []
 
     for chunk_id in chunk_ids:

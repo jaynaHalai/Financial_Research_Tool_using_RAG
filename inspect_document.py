@@ -1,31 +1,16 @@
-# Import Path so we can work with files and folders
-from pathlib import Path
+"""Clean the saved SEC filing HTML into plain text for chunking.
 
-# Import BeautifulSoup so we can parse the HTML document
+The saved page wraps the filing in site navigation and inline XBRL metadata.
+Both are stripped here so that everything downstream, including the printed
+page numbers page_map.py depends on, works from the filing's own text.
+"""
+
 from bs4 import BeautifulSoup
 
-# Tell Python where the ARM annual report is located
-html_file = Path("data/raw/SEC Filing – Arm®.html")
+from config import CLEANED_TEXT, SOURCE_HTML
 
-# Choose where to save the cleaned text
-text_file = Path("data/raw/arm_report.txt")
-
-# Read the HTML file
-html = html_file.read_text(encoding="utf-8", errors="replace")
-
-# Parse the HTML
-soup = BeautifulSoup(html, "html.parser")
-
-# Remove XBRL metadata sections but keep the filing itself
-for tag_name in ["ix:header", "ix:hidden"]:
-    for tag in soup.find_all(tag_name):
-        tag.decompose()
-
-# Extract readable text
-text = soup.get_text(separator="\n", strip=True)
-
-# Remove obvious website navigation from the beginning
-noise = [
+# Site furniture that appears once, ahead of the filing itself.
+NAVIGATION = [
     "SEC Filing – Arm®",
     "Download DOC",
     "Download PDF",
@@ -33,20 +18,25 @@ noise = [
     "Download XBRL",
 ]
 
-for item in noise:
+html = SOURCE_HTML.read_text(encoding="utf-8", errors="replace")
+soup = BeautifulSoup(html, "html.parser")
+
+# Inline XBRL tagging duplicates every figure as hidden metadata; keeping it
+# would put each number in the document twice.
+for tag_name in ["ix:header", "ix:hidden"]:
+    for tag in soup.find_all(tag_name):
+        tag.decompose()
+
+text = soup.get_text(separator="\n", strip=True)
+
+for item in NAVIGATION:
     text = text.replace(item, "", 1)
 
-# Clean up excessive blank lines
 lines = [line.strip() for line in text.splitlines()]
-lines = [line for line in lines if line]
+cleaned_text = "\n".join(line for line in lines if line)
 
-# Put the cleaned lines back together
-cleaned_text = "\n".join(lines)
+CLEANED_TEXT.write_text(cleaned_text, encoding="utf-8")
 
-# Save the cleaned document
-text_file.write_text(cleaned_text, encoding="utf-8")
-
-# Confirm the result
 print(f"Cleaned characters: {len(cleaned_text):,}")
-print(f"Saved cleaned text to: {text_file}")
-
+print(f"Words: {len(cleaned_text.split()):,}")
+print(f"Saved cleaned text to: {CLEANED_TEXT}")

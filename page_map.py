@@ -9,6 +9,8 @@ increasing subsequence of candidate numbers and discard the rest.
 import bisect
 from pathlib import Path
 
+from config import CLEANED_TEXT
+
 MAX_PAGE = 300
 
 
@@ -91,12 +93,12 @@ def pages_for_span(word_offsets, pages, start, end):
     first = min(first, len(pages) - 1)
     last = min(last, len(pages) - 1)
 
-    return sorted(set(pages[first:last + 1])) or [pages[last]]
+    # last >= first always, so this slice is never empty.
+    return sorted(set(pages[first:last + 1]))
 
 
-def load_page_map(path="data/raw/arm_report.txt"):
-    text = Path(path).read_text(encoding="utf-8")
-    return build_page_map(text)
+def load_page_map(path=CLEANED_TEXT):
+    return build_page_map(Path(path).read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

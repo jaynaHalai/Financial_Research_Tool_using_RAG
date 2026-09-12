@@ -6,21 +6,15 @@ embedding call for the query instead of one for every chunk in the corpus.
 
 import json
 import os
-from pathlib import Path
 
 import faiss
 import numpy as np
 from dotenv import load_dotenv
 from langchain_openai import OpenAIEmbeddings
 
-EMBEDDING_MODEL = "text-embedding-3-small"
-BATCH_SIZE = 64
-INDEX_DIR = Path("data/index")
+from config import CHUNK_PATHS, EMBEDDING_MODEL, INDEX_DIR
 
-STRATEGIES = {
-    "fixed": "data/fixed_chunks.json",
-    "semantic": "data/semantic_chunks.json",
-}
+BATCH_SIZE = 64
 
 load_dotenv()
 
@@ -33,8 +27,8 @@ embeddings = OpenAIEmbeddings(api_key=api_key, model=EMBEDDING_MODEL)
 
 INDEX_DIR.mkdir(parents=True, exist_ok=True)
 
-for strategy, chunk_path in STRATEGIES.items():
-    chunks = json.loads(Path(chunk_path).read_text(encoding="utf-8"))
+for strategy, chunk_path in CHUNK_PATHS.items():
+    chunks = json.loads(chunk_path.read_text(encoding="utf-8"))
     texts = [chunk["text"] for chunk in chunks]
 
     vectors = []
@@ -66,7 +60,7 @@ for strategy, chunk_path in STRATEGIES.items():
 
 manifest = {
     "embedding_model": EMBEDDING_MODEL,
-    "strategies": list(STRATEGIES),
+    "strategies": list(CHUNK_PATHS),
     "similarity": "cosine (L2-normalised inner product)",
 }
 

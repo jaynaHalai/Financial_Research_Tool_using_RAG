@@ -8,7 +8,6 @@ fuses both rankings, then a cross-encoder reranks the shortlist.
 import json
 import os
 import re
-from pathlib import Path
 
 import faiss
 import numpy as np
@@ -17,8 +16,8 @@ from langchain_openai import OpenAIEmbeddings
 from rank_bm25 import BM25Okapi
 from sentence_transformers import CrossEncoder
 
-EMBEDDING_MODEL = "text-embedding-3-small"
-RERANK_MODEL = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+from config import CHUNK_PATHS, EMBEDDING_MODEL, INDEX_DIR, RERANK_MODEL
+
 RRF_K = 60
 
 # The cross-encoder truncates at 512 tokens, but chunks reach ~2,800 tokens of
@@ -27,11 +26,6 @@ RRF_K = 60
 # limit, and a chunk takes the score of its best window.
 RERANK_WINDOW_WORDS = 250
 RERANK_WINDOW_OVERLAP = 50
-
-CHUNK_PATHS = {
-    "fixed": "data/fixed_chunks.json",
-    "semantic": "data/semantic_chunks.json",
-}
 
 # Keeps "4,007" and "87.1%" as single tokens so table lookups stay searchable.
 TOKEN_PATTERN = re.compile(r"[a-z0-9][a-z0-9.,%$-]*")
@@ -79,7 +73,7 @@ class Retriever:
     # every configuration.
     _query_cache = {}
 
-    def __init__(self, strategy="semantic", load_reranker=True):
+    def __init__(self, strategy="semantic"):
         load_dotenv()
 
         api_key = os.getenv("OPENAI_API_KEY")
@@ -89,10 +83,10 @@ class Retriever:
 
         self.strategy = strategy
         self.chunks = json.loads(
-            Path(CHUNK_PATHS[strategy]).read_text(encoding="utf-8")
+            CHUNK_PATHS[strategy].read_text(encoding="utf-8")
         )
 
-        index_path = Path("data/index") / f"{strategy}.faiss"
+        index_path = INDEX_DIR / f"{strategy}.faiss"
 
         if not index_path.exists():
             raise FileNotFoundError(
@@ -109,6 +103,9 @@ class Retriever:
                 f"{CHUNK_PATHS[strategy]} holds {len(self.chunks)} chunks. "
                 "Re-run build_vector_store.py."
             )
+
+        self._check_embedding_model()
+
         self.embeddings = OpenAIEmbeddings(
             api_key=api_key, model=EMBEDDING_MODEL
         )
@@ -117,8 +114,33 @@ class Retriever:
             [tokenize(chunk["text"]) for chunk in self.chunks]
         )
 
-        if load_reranker and Retriever._reranker is None:
+    @staticmethod
+    def _check_embedding_model():
+        """Refuse an index built with a different embedding model.
+
+        Querying a mismatched index degrades results quietly instead of
+        failing, which is the hardest kind of bug to notice.
+        """
+        manifest_path = INDEX_DIR / "manifest.json"
+
+        if not manifest_path.exists():
+            return
+
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        built_with = manifest.get("embedding_model")
+
+        if built_with and built_with != EMBEDDING_MODEL:
+            raise ValueError(
+                f"Index was built with {built_with} but this process embeds "
+                f"queries with {EMBEDDING_MODEL}. Re-run build_vector_store.py."
+            )
+
+    @staticmethod
+    def _reranker_model():
+        if Retriever._reranker is None:
             Retriever._reranker = CrossEncoder(RERANK_MODEL)
+
+        return Retriever._reranker
 
     def _query_vector(self, query):
         if query not in Retriever._query_cache:
@@ -169,7 +191,7 @@ class Retriever:
                 pairs.append((query, segment))
                 owners.append(chunk_id)
 
-        scores = Retriever._reranker.predict(pairs)
+        scores = Retriever._reranker_model().predict(pairs)
 
         # A chunk is worth its best-matching window.
         best = {}

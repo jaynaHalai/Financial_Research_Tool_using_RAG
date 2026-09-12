@@ -10,7 +10,7 @@ behind every claim, and refuses when the filing does not contain the answer.
 > target and a **3-second p95 latency** ceiling.
 
 Measured: **100% faithfulness**, **100% correct refusal**, **100% citation
-validity**, **p50 1.75s / p95 2.01s**.
+validity**, **p50 1.957s / p95 2.416s**.
 
 **[Full evaluation report →](evaluation/report.html)**
 
@@ -135,7 +135,7 @@ required span counts only if it appears word-for-word in the retrieved text.
 | Correct refusal | 100% — 5 of 5 unanswerable |
 | False refusal | 0% — 0 of 10 answerable |
 | Citation validity | 100% |
-| Latency | p50 1.75s, p95 2.01s |
+| Latency | p50 1.957s, p95 2.416s |
 
 Full results for all 18 configurations: `evaluation/retrieval_results.json`.
 
@@ -195,6 +195,7 @@ separately for exactly this reason.
 ## Repository layout
 
 ```
+config.py                  models and paths, single source of truth
 inspect_document.py        HTML -> cleaned text
 page_map.py                printed page numbers from footer positions
 build_fixed_chunks.py      fixed-size chunking

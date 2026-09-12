@@ -1,14 +1,14 @@
 """Fixed-size chunking: 500-word windows with 50 words of overlap."""
 
 import json
-from pathlib import Path
 
+from config import CHUNK_PATHS, CLEANED_TEXT
 from page_map import build_page_map, pages_for_span
 
 CHUNK_SIZE = 500
 OVERLAP = 50
 
-text = Path("data/raw/arm_report.txt").read_text(encoding="utf-8")
+text = CLEANED_TEXT.read_text(encoding="utf-8")
 
 word_offsets, page_numbers = build_page_map(text)
 
@@ -27,12 +27,11 @@ for start in range(0, len(words), step):
 
     chunks.append({
         "chunk_id": len(chunks),
-        "strategy": "fixed",
         "text": " ".join(chunk_words),
         "pages": pages_for_span(word_offsets, page_numbers, start, end),
     })
 
-Path("data/fixed_chunks.json").write_text(
+CHUNK_PATHS["fixed"].write_text(
     json.dumps(chunks, indent=2),
     encoding="utf-8"
 )

@@ -20,15 +20,12 @@ grading its own work.
 import json
 import os
 import re
-import time
-from pathlib import Path
 
 from dotenv import load_dotenv
 from langchain_openai import ChatOpenAI
 
+from config import ANSWER_RESULTS, GENERATION_MODEL, JUDGE_MODEL, QUESTIONS
 from rag_pipeline import answer, build, format_evidence, invoke_with_retry
-
-JUDGE_MODEL = "gpt-4o"
 
 JUDGE_PROMPT = """You are auditing a financial research assistant for \
 faithfulness.
@@ -79,9 +76,7 @@ def cited_pages(text):
 def main():
     load_dotenv()
 
-    questions = json.loads(
-        Path("evaluation/pilot_questions.json").read_text(encoding="utf-8")
-    )
+    questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
 
     retriever, llm = build()
     judge = ChatOpenAI(
@@ -155,7 +150,7 @@ def main():
     p95 = latencies[max(0, int(len(latencies) * 0.95) - 1)]
 
     summary = {
-        "generation_model": "gpt-4o-mini",
+        "generation_model": GENERATION_MODEL,
         "judge_model": JUDGE_MODEL,
         "answerable_questions": len(answerable),
         "unanswerable_questions": len(unanswerable),
@@ -168,7 +163,7 @@ def main():
         "latency_p95_seconds": p95,
     }
 
-    Path("evaluation/answer_results.json").write_text(
+    ANSWER_RESULTS.write_text(
         json.dumps({"summary": summary, "records": records}, indent=2),
         encoding="utf-8",
     )

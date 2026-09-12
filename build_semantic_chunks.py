@@ -8,12 +8,12 @@ chunking comparison in evaluate_retrieval.py measures against fixed chunks.
 
 import json
 import os
-from pathlib import Path
 
 from dotenv import load_dotenv
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_openai import OpenAIEmbeddings
 
+from config import CHUNK_PATHS, CLEANED_TEXT, EMBEDDING_MODEL
 from page_map import build_page_map, pages_for_span
 
 MIN_WORDS = 400
@@ -26,14 +26,11 @@ api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     raise ValueError("OPENAI_API_KEY was not found.")
 
-text = Path("data/raw/arm_report.txt").read_text(encoding="utf-8")
+text = CLEANED_TEXT.read_text(encoding="utf-8")
 
 word_offsets, page_numbers = build_page_map(text)
 
-embeddings = OpenAIEmbeddings(
-    api_key=api_key,
-    model="text-embedding-3-small"
-)
+embeddings = OpenAIEmbeddings(api_key=api_key, model=EMBEDDING_MODEL)
 
 splitter = SemanticChunker(
     embeddings,
@@ -52,7 +49,6 @@ consumed = 0
 def flush(words, start):
     chunks.append({
         "chunk_id": len(chunks),
-        "strategy": "semantic",
         "text": " ".join(words),
         "pages": pages_for_span(
             word_offsets, page_numbers, start, start + len(words)
@@ -74,7 +70,7 @@ for document in documents:
 if current:
     flush(current, current_start)
 
-Path("data/semantic_chunks.json").write_text(
+CHUNK_PATHS["semantic"].write_text(
     json.dumps(chunks, indent=2),
     encoding="utf-8"
 )

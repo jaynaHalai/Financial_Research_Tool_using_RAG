@@ -12,8 +12,8 @@ Metrics, over the answerable questions only:
 
 import json
 import time
-from pathlib import Path
 
+from config import QUESTIONS, RETRIEVAL_RESULTS
 from retrieval import Retriever
 
 STRATEGIES = ["fixed", "semantic"]
@@ -37,9 +37,7 @@ def recovered(span, retrieved_text):
     return 1.0 if normalize(span) in retrieved_text else 0.0
 
 
-questions = json.loads(
-    Path("evaluation/pilot_questions.json").read_text(encoding="utf-8")
-)
+questions = json.loads(QUESTIONS.read_text(encoding="utf-8"))
 
 answerable = [q for q in questions if q["answerable"]]
 
@@ -117,7 +115,7 @@ results = {
     "results": rows,
 }
 
-Path("evaluation/retrieval_results.json").write_text(
+RETRIEVAL_RESULTS.write_text(
     json.dumps(results, indent=2), encoding="utf-8"
 )
 
