@@ -7,3 +7,4 @@ data/index/
 
 # Saved-page junk from the original SEC filing download
 data/raw/SEC Filing – Arm®_files/
+.DS_Store
