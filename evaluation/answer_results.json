@@ -9,8 +9,8 @@
     "false_refusal_rate": 0.0,
     "citation_rate": 1.0,
     "citation_validity": 1.0,
-    "latency_p50_seconds": 1.957,
-    "latency_p95_seconds": 2.416
+    "latency_p50_seconds": 1.757,
+    "latency_p95_seconds": 2.341
   },
   "records": [
     {
@@ -31,9 +31,9 @@
         188,
         189
       ],
-      "retrieval_seconds": 2.6,
-      "generation_seconds": 1.987,
-      "total_seconds": 4.586,
+      "retrieval_seconds": 2.681,
+      "generation_seconds": 1.155,
+      "total_seconds": 3.836,
       "id": "Q01",
       "answerable": true,
       "cited": true,
@@ -49,7 +49,7 @@
     },
     {
       "question": "What primarily drove the increase in Arm's royalty revenue in fiscal 2025?",
-      "answer": "The increase in Arm's royalty revenue in fiscal 2025 was primarily driven by higher chip shipments and an improved mix of products with higher royalty rates per chip [pages 71-73]. Specifically, royalty revenue increased by $366 million, or 20%, compared to the previous fiscal year [pages 71-73]. Additionally, revenue from related parties also contributed to the overall increase, with a notable rise in royalty revenue from those sources [pages 71-73]. Overall, the combination of increased chip shipments and a favorable product mix significantly boosted royalty revenue.",
+      "answer": "The increase in Arm's royalty revenue in fiscal 2025 was primarily driven by higher chip shipments and an improved mix of products with higher royalty rates per chip [pages 71-73]. Specifically, royalty revenue increased by $366 million, or 20%, compared to the previous fiscal year [pages 71-73]. Additionally, revenue from related parties also contributed to the overall increase in royalty revenue, with an 18% rise in royalty revenue from that segment [pages 71-73]. Overall, the combination of increased chip shipments and a favorable product mix significantly boosted royalty revenue.",
       "refused": false,
       "citations": [
         "pages 71-73",
@@ -65,9 +65,9 @@
         188,
         217
       ],
-      "retrieval_seconds": 0.706,
-      "generation_seconds": 1.567,
-      "total_seconds": 2.273,
+      "retrieval_seconds": 0.604,
+      "generation_seconds": 1.35,
+      "total_seconds": 1.953,
       "id": "Q02",
       "answerable": true,
       "cited": true,
@@ -79,11 +79,11 @@
       "unsupported_citations": [],
       "citations_valid": true,
       "faithful": true,
-      "judge_note": "Every factual claim in the answer is directly supported by the evidence provided."
+      "judge_note": "All factual claims in the answer are directly supported by the evidence provided."
     },
     {
       "question": "How does Arm describe the relationship between its Flexible Access agreements and tape-out?",
-      "answer": "Arm describes its Flexible Access agreements as having two components: an annual low-cost portfolio license fee and a license fee that is due once the customer reaches \"tape-out.\" Tape-out is defined as the point when the final result of the customer's semiconductor chip design, which incorporates Arm's products, is sent for manufacturing. This structure allows customers to experiment with different configurations of Arm products before committing to a final chip design. Flexible Access agreements are particularly suited for smaller companies and start-ups looking to explore various design options [pages 68-69].",
+      "answer": "Arm describes its Flexible Access agreements as providing customers with access to a range of products, particularly older and less performant ones, with two key components: an annual low-cost portfolio license fee and a license fee that is due once the customer reaches \"tape-out.\" Tape-out is defined as the point when the final result of a customer's semiconductor chip design, which incorporates Arm's products, is sent for manufacturing. This structure allows customers, especially smaller companies and start-ups, to experiment with different configurations before committing to a final chip design [pages 68-69]. In contrast, under Arm Total Access agreements, there are no additional fees upon tape-out, as manufacturing design rights are included in the portfolio license fee [pages 68-69].",
       "refused": false,
       "citations": [
         "pages 68-69",
@@ -99,9 +99,9 @@
         89,
         88
       ],
-      "retrieval_seconds": 0.487,
-      "generation_seconds": 1.566,
-      "total_seconds": 2.053,
+      "retrieval_seconds": 0.486,
+      "generation_seconds": 1.855,
+      "total_seconds": 2.341,
       "id": "Q03",
       "answerable": true,
       "cited": true,
@@ -116,7 +116,7 @@
     },
     {
       "question": "What does Arm say about partnering with third parties when it lacks certain resources for research and development?",
-      "answer": "Arm states that when it lacks the technical expertise, financial resources, or other capabilities for a particular research and development project, it has partnered, and may in the future partner, with third parties. This approach is intended to help develop new products or solutions that align with their market goals. However, there is no assurance that such partnerships will be established on a timely basis or on competitive terms [pages 69-70]. Additionally, Arm has begun exploring potential acquisitions or service agreements with companies that possess the required expertise [pages 10-11].",
+      "answer": "Arm states that when it lacks the technical expertise, financial resources, or other capabilities for a particular research and development project, it has partnered, and may in the future partner, with third parties. This approach is intended to help develop new products or solutions that align with their market goals. They acknowledge that establishing such partnerships may not always occur on a timely basis or on competitive terms [pages 69-70]. Additionally, they have begun exploring potential acquisitions or service agreements with companies that possess the required expertise [page 10-11].",
       "refused": false,
       "citations": [
         "pages 69-70",
@@ -132,9 +132,9 @@
         114,
         13
       ],
-      "retrieval_seconds": 0.508,
-      "generation_seconds": 1.474,
-      "total_seconds": 1.981,
+      "retrieval_seconds": 0.451,
+      "generation_seconds": 1.306,
+      "total_seconds": 1.757,
       "id": "Q04",
       "answerable": true,
       "cited": true,
@@ -151,7 +151,7 @@
     },
     {
       "question": "What were Arm's external-customer and related-party revenues in fiscal 2025?",
-      "answer": "In fiscal 2025, Arm's revenue from external customers was $3,184 million, while revenue from related parties was $823 million, making the total revenue $4,007 million [pages 71-73]. The external customer revenue represented 79% of total revenue, and related party revenue accounted for 21% [pages 71-73]. The increase in revenue from external customers was driven by a rise in both license and royalty revenue [pages 71-73]. Revenue from related parties also increased, primarily due to higher royalty and license revenue [pages 71-73].",
+      "answer": "In fiscal 2025, Arm's revenue from external customers was $3,184 million, while revenue from related parties was $823 million, making the total revenue $4,007 million [pages 71-73]. The external customer revenue represented 79% of total revenue, and related party revenue accounted for 21% [pages 71-73]. The revenue from external customers increased by 27% compared to the previous fiscal year, while revenue from related parties increased by 14% [pages 71-73].",
       "refused": false,
       "citations": [
         "pages 148-150",
@@ -167,9 +167,9 @@
         157,
         112
       ],
-      "retrieval_seconds": 0.558,
-      "generation_seconds": 1.407,
-      "total_seconds": 1.965,
+      "retrieval_seconds": 0.529,
+      "generation_seconds": 1.2,
+      "total_seconds": 1.729,
       "id": "Q05",
       "answerable": true,
       "cited": true,
@@ -181,7 +181,7 @@
       "unsupported_citations": [],
       "citations_valid": true,
       "faithful": true,
-      "judge_note": "Every factual claim in the answer is directly supported by the evidence provided."
+      "judge_note": "All factual claims in the answer are directly supported by the evidence provided."
     },
     {
       "question": "How much did Arm's license and other revenue increase in fiscal 2025 compared with fiscal 2024?",
@@ -201,9 +201,9 @@
         219,
         217
       ],
-      "retrieval_seconds": 0.752,
-      "generation_seconds": 1.664,
-      "total_seconds": 2.416,
+      "retrieval_seconds": 0.625,
+      "generation_seconds": 1.261,
+      "total_seconds": 1.886,
       "id": "Q06",
       "answerable": true,
       "cited": true,
@@ -218,7 +218,7 @@
       "unsupported_citations": [],
       "citations_valid": true,
       "faithful": true,
-      "judge_note": "Every factual claim in the answer is directly supported by the evidence provided."
+      "judge_note": "All factual claims in the answer are directly supported by the evidence provided."
     },
     {
       "question": "What percentage of Arm's outstanding ordinary shares did SoftBank Group beneficially own as of May 20, 2025?",
@@ -238,9 +238,9 @@
         152,
         95
       ],
-      "retrieval_seconds": 0.712,
-      "generation_seconds": 1.245,
-      "total_seconds": 1.957,
+      "retrieval_seconds": 0.619,
+      "generation_seconds": 1.162,
+      "total_seconds": 1.78,
       "id": "Q07",
       "answerable": true,
       "cited": true,
@@ -260,7 +260,7 @@
     },
     {
       "question": "What is Arm's stated sensitivity of operating expenses to a 10% weakening of the U.S. dollar?",
-      "answer": "If the U.S. dollar weakened by 10%, Arm's operating expenses could increase by as much as 4% [pages 189-191]. This sensitivity analysis highlights the potential impact of foreign currency exchange risk on the company's expenses. The company enters into foreign currency forward contracts to help mitigate this risk. Overall, a weaker U.S. dollar adversely affects Arm's expenses.",
+      "answer": "If the U.S. dollar weakened by 10%, Arm's operating expenses could increase by as much as 4% [pages 189-191]. This sensitivity analysis highlights the potential impact of foreign currency exchange risk on the company's financials. The company enters into foreign currency forward contracts to help mitigate this risk. Overall, a weaker U.S. dollar adversely affects Arm's expenses.",
       "refused": false,
       "citations": [
         "pages 189-191",
@@ -276,9 +276,9 @@
         216,
         212
       ],
-      "retrieval_seconds": 0.608,
-      "generation_seconds": 1.045,
-      "total_seconds": 1.653,
+      "retrieval_seconds": 0.522,
+      "generation_seconds": 1.202,
+      "total_seconds": 1.724,
       "id": "Q08",
       "answerable": true,
       "cited": true,
@@ -290,7 +290,7 @@
       "unsupported_citations": [],
       "citations_valid": true,
       "faithful": true,
-      "judge_note": "The answer accurately reflects the information provided in the evidence regarding the impact of a 10% weakening of the U.S. dollar on Arm's operating expenses and the use of foreign currency forward contracts to mitigate this risk."
+      "judge_note": "The answer accurately reflects the information provided in the evidence regarding the impact of a 10% weakening of the U.S. dollar on operating expenses and the use of foreign currency forward contracts to mitigate risk."
     },
     {
       "question": "Who is principally responsible for overseeing Arm's security incident response plan and cybersecurity risk management program?",
@@ -310,9 +310,9 @@
         245,
         241
       ],
-      "retrieval_seconds": 0.705,
-      "generation_seconds": 1.112,
-      "total_seconds": 1.817,
+      "retrieval_seconds": 0.654,
+      "generation_seconds": 1.174,
+      "total_seconds": 1.827,
       "id": "Q09",
       "answerable": true,
       "cited": true,
@@ -328,7 +328,7 @@
     },
     {
       "question": "Has Arm experienced cybersecurity threats that materially affected its business as of the filing date?",
-      "answer": "As of the filing date, Arm has not experienced cybersecurity threats that materially affected its business, including its business strategy, results of operations, or financial condition. While the company faces risks from cybersecurity threats that could have a material adverse effect, it has established comprehensive security measures and incident response plans to manage these risks effectively. The company has identified no material breaches of its information technology systems as of the date of the report [pages 198-199][pages 30-32]. However, it acknowledges the potential for future incidents that could impact its operations.",
+      "answer": "As of the filing date, Arm has not experienced cybersecurity threats that materially affected its business, including its business strategy, results of operations, or financial condition. While the company faces risks from cybersecurity threats that could have a material adverse effect, it has identified no material breaches of its information technology systems as of the date of the report [pages 198-199]. The company has established comprehensive security measures and incident response plans to address potential cybersecurity threats [pages 196-198]. However, it acknowledges the possibility of future breaches and the challenges in monitoring third-party security [pages 30-32].",
       "refused": false,
       "citations": [
         "pages 198-199",
@@ -344,9 +344,9 @@
         239,
         45
       ],
-      "retrieval_seconds": 0.687,
-      "generation_seconds": 1.37,
-      "total_seconds": 2.057,
+      "retrieval_seconds": 0.646,
+      "generation_seconds": 1.473,
+      "total_seconds": 2.119,
       "id": "Q10",
       "answerable": true,
       "cited": true,
@@ -354,13 +354,15 @@
         30,
         31,
         32,
+        196,
+        197,
         198,
         199
       ],
       "unsupported_citations": [],
       "citations_valid": true,
       "faithful": true,
-      "judge_note": "The answer accurately reflects the evidence provided, stating that Arm has not experienced material cybersecurity threats and has comprehensive security measures in place."
+      "judge_note": "Every factual claim in the answer is directly supported by the evidence provided."
     },
     {
       "question": "What is Arm's revenue guidance for fiscal year 2026?",
@@ -380,9 +382,9 @@
         188,
         216
       ],
-      "retrieval_seconds": 0.629,
-      "generation_seconds": 0.765,
-      "total_seconds": 1.394,
+      "retrieval_seconds": 0.617,
+      "generation_seconds": 0.568,
+      "total_seconds": 1.186,
       "id": "Q11",
       "answerable": false,
       "cited": false,
@@ -410,9 +412,9 @@
         83,
         188
       ],
-      "retrieval_seconds": 0.593,
-      "generation_seconds": 0.771,
-      "total_seconds": 1.365,
+      "retrieval_seconds": 0.508,
+      "generation_seconds": 0.591,
+      "total_seconds": 1.099,
       "id": "Q12",
       "answerable": false,
       "cited": false,
@@ -440,9 +442,9 @@
         194,
         190
       ],
-      "retrieval_seconds": 0.512,
-      "generation_seconds": 0.627,
-      "total_seconds": 1.139,
+      "retrieval_seconds": 0.536,
+      "generation_seconds": 0.698,
+      "total_seconds": 1.233,
       "id": "Q13",
       "answerable": false,
       "cited": false,
@@ -470,9 +472,9 @@
         27,
         166
       ],
-      "retrieval_seconds": 0.56,
-      "generation_seconds": 0.714,
-      "total_seconds": 1.274,
+      "retrieval_seconds": 0.558,
+      "generation_seconds": 0.595,
+      "total_seconds": 1.153,
       "id": "Q14",
       "answerable": false,
       "cited": false,
@@ -500,9 +502,9 @@
         90,
         19
       ],
-      "retrieval_seconds": 0.496,
-      "generation_seconds": 0.611,
-      "total_seconds": 1.107,
+      "retrieval_seconds": 0.505,
+      "generation_seconds": 0.685,
+      "total_seconds": 1.19,
       "id": "Q15",
       "answerable": false,
       "cited": false,

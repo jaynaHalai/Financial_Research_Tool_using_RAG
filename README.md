@@ -10,7 +10,7 @@ behind every claim, and refuses when the filing does not contain the answer.
 > target and a **3-second p95 latency** ceiling.
 
 Measured: **100% faithfulness**, **100% correct refusal**, **100% citation
-validity**, **p50 1.957s / p95 2.416s**.
+validity**, **p50 ~1.8s / p95 ~2.3s**.
 
 **[Full evaluation report →](evaluation/report.html)**
 
@@ -101,9 +101,21 @@ python rag_pipeline.py             # interactive Q&A
 ```
 
 Embeddings are computed once at build time and persisted, so a question costs
-one embedding call rather than one per chunk. If the chunk files are rebuilt
-without rebuilding the index, `retrieval.py` refuses to run rather than return
-misaligned passages.
+one embedding call rather than one per chunk.
+
+Two guards protect the index from going quietly stale. If the chunk files are
+rebuilt without rebuilding the index, `retrieval.py` refuses to start rather
+than return misaligned passages. And `data/index/manifest.json` records the
+model the index was built with, so querying it with a different embedding model
+fails loudly instead of silently degrading retrieval.
+
+### Reproducibility
+
+The pipeline has been re-run end to end from the source HTML. The cleaned text
+and both chunk files reproduce **byte-identically**. The FAISS indexes do not —
+OpenAI embeddings vary in the last few floating-point places between calls —
+but all 18 retrieval configurations and every answer-quality metric reproduce
+exactly. Only latency moves, by roughly 0.2s run to run.
 
 ---
 
@@ -135,7 +147,7 @@ required span counts only if it appears word-for-word in the retrieved text.
 | Correct refusal | 100% — 5 of 5 unanswerable |
 | False refusal | 0% — 0 of 10 answerable |
 | Citation validity | 100% |
-| Latency | p50 1.957s, p95 2.416s |
+| Latency | p50 ~1.8s, p95 ~2.3s (warm) |
 
 Full results for all 18 configurations: `evaluation/retrieval_results.json`.
 
@@ -187,8 +199,9 @@ separately for exactly this reason.
   units longer than the 600-word ceiling pass through whole. Actual spread:
   172 chunks in band, 51 under, 35 over, range 10 to 2,436 words. This is the
   root cause of the reranker truncation problem above.
-- Latency is measured warm, single-user, with no concurrency. A cold start adds
-  several seconds while the cross-encoder loads.
+- Latency is measured warm, single-user, with no concurrency, and moves by
+  roughly 0.2s between runs, so it is quoted to one decimal place. A cold start
+  adds a few seconds more while the cross-encoder loads on first use.
 
 ---
 
