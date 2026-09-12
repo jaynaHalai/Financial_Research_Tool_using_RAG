@@ -12,7 +12,10 @@ behind every claim, and refuses when the filing does not contain the answer.
 Measured: **100% faithfulness**, **100% correct refusal**, **100% citation
 validity**, **p50 ~1.8s / p95 ~2.3s**.
 
-**[Full evaluation report →](evaluation/report.html)**
+**[Read the evaluation report →](https://jaynahalai.github.io/Financial_Research_Tool_using_RAG/)**
+
+Charts, the full 18-configuration table, and the failure analysis. Source:
+[`evaluation/report.html`](evaluation/report.html).
 
 ---
 
